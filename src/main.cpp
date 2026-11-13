@@ -13,7 +13,7 @@ int main() {
     SDL_Window* window = SDL_CreateWindow("Sandfall", 720, 1600, 0);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
     
-    bool isRunning = false;
+    bool isRunning = true;
     while (isRunning) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
