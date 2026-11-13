@@ -1,0 +1,23 @@
+# Ignore the entire build output folder
+build/
+bin/
+
+# Ignore compiled executables and libraries
+*.o
+*.obj
+*.so
+*.a
+*.out
+sand
+game
+
+# Ignore CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# Ignore editor and OS trash
+.DS_Store
+Thumbs.db
+*.swp
+*~
