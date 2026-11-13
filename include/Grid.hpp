@@ -1,10 +1,12 @@
 #pragma once
+#include "GlobalVariable.hpp"
+#include "CellType.hpp"
 #include <array>
+#include <iostream>
 
 class Grid {
-    static const unsigned int sizeX = 60;
-    static const unsigned int sizeY = 60;
-    
     public:
-        std::array<std::array<unsigned int, sizeX>, sizeY> cell = {};
+        std::array<std::array<CellType, Global::canvaSizeX>, Global::canvaSizeY> cell = {};
+
+        void dump();
 };

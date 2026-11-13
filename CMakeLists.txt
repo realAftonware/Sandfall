@@ -9,7 +9,7 @@ find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
 
 add_executable(game
     src/main.cpp
-    src/textDisplay.cpp
+    src/Grid.cpp
 )
 
 target_link_libraries(game PRIVATE SDL3::SDL3)

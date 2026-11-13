@@ -1,1 +1,1 @@
-/usr/bin/clang++ -Xlinker --dependency-file -Xlinker CMakeFiles/game.dir/link.d CMakeFiles/game.dir/src/main.cpp.o -o game  /usr/lib/libSDL3.so.0.4.20
+/usr/bin/clang++ -Xlinker --dependency-file -Xlinker CMakeFiles/game.dir/link.d CMakeFiles/game.dir/src/main.cpp.o CMakeFiles/game.dir/src/Grid.cpp.o -o game  /usr/lib/libSDL3.so.0.4.20
