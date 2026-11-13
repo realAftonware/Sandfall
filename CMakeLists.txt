@@ -11,4 +11,4 @@ add_executable(game
     src/main.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
+target_link_libraries(game PRIVATE SDL3::SDL3)
