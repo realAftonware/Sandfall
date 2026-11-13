@@ -1,4 +1,42 @@
 CMakeFiles/game.dir/src/main.cpp.o: /public/Sandfall/src/main.cpp \
+  /usr/include/SDL3/SDL.h /usr/include/SDL3/SDL_stdinc.h \
+  /usr/include/SDL3/SDL_platform_defines.h /usr/include/stdarg.h \
+  /usr/include/bits/alltypes.h /usr/include/fortify/string.h \
+  /usr/include/string.h /usr/include/features.h \
+  /usr/include/fortify/strings.h /usr/include/strings.h \
+  /usr/include/fortify/wchar.h /usr/include/limits.h \
+  /usr/include/bits/limits.h /usr/include/stdlib.h /usr/include/alloca.h \
+  /usr/include/wchar.h /usr/include/stdint.h /usr/include/bits/stdint.h \
+  /usr/include/SDL3/SDL_begin_code.h /usr/include/SDL3/SDL_close_code.h \
+  /usr/include/SDL3/SDL_assert.h /usr/include/SDL3/SDL_asyncio.h \
+  /usr/include/SDL3/SDL_atomic.h /usr/include/SDL3/SDL_audio.h \
+  /usr/include/SDL3/SDL_endian.h /usr/include/endian.h \
+  /usr/include/SDL3/SDL_error.h /usr/include/SDL3/SDL_mutex.h \
+  /usr/include/SDL3/SDL_thread.h /usr/include/SDL3/SDL_properties.h \
+  /usr/include/SDL3/SDL_iostream.h /usr/include/SDL3/SDL_bits.h \
+  /usr/include/SDL3/SDL_blendmode.h /usr/include/SDL3/SDL_camera.h \
+  /usr/include/SDL3/SDL_pixels.h /usr/include/SDL3/SDL_surface.h \
+  /usr/include/SDL3/SDL_rect.h /usr/include/SDL3/SDL_clipboard.h \
+  /usr/include/SDL3/SDL_cpuinfo.h /usr/include/SDL3/SDL_dialog.h \
+  /usr/include/SDL3/SDL_video.h /usr/include/SDL3/SDL_dlopennote.h \
+  /usr/include/SDL3/SDL_events.h /usr/include/SDL3/SDL_gamepad.h \
+  /usr/include/SDL3/SDL_guid.h /usr/include/SDL3/SDL_joystick.h \
+  /usr/include/SDL3/SDL_power.h /usr/include/SDL3/SDL_sensor.h \
+  /usr/include/SDL3/SDL_keyboard.h /usr/include/SDL3/SDL_keycode.h \
+  /usr/include/SDL3/SDL_scancode.h /usr/include/SDL3/SDL_mouse.h \
+  /usr/include/SDL3/SDL_pen.h /usr/include/SDL3/SDL_touch.h \
+  /usr/include/SDL3/SDL_filesystem.h /usr/include/SDL3/SDL_gpu.h \
+  /usr/include/SDL3/SDL_haptic.h /usr/include/SDL3/SDL_hidapi.h \
+  /usr/include/SDL3/SDL_hints.h /usr/include/SDL3/SDL_init.h \
+  /usr/include/SDL3/SDL_loadso.h /usr/include/SDL3/SDL_locale.h \
+  /usr/include/SDL3/SDL_log.h /usr/include/SDL3/SDL_messagebox.h \
+  /usr/include/SDL3/SDL_metal.h /usr/include/SDL3/SDL_misc.h \
+  /usr/include/SDL3/SDL_platform.h /usr/include/SDL3/SDL_process.h \
+  /usr/include/SDL3/SDL_render.h /usr/include/SDL3/SDL_storage.h \
+  /usr/include/SDL3/SDL_system.h /usr/include/SDL3/SDL_time.h \
+  /usr/include/SDL3/SDL_timer.h /usr/include/SDL3/SDL_tray.h \
+  /usr/include/SDL3/SDL_version.h /usr/include/SDL3/SDL_oldnames.h \
+  /usr/include/SDL3/SDL_main.h \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/iostream \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/bits/requires_hosted.h \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/aarch64-alpine-linux-musl/bits/c++config.h \
@@ -12,11 +50,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /public/Sandfall/src/main.cpp \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/bits/memoryfwd.h \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/bits/postypes.h \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/cwchar \
-  /usr/include/fortify/wchar.h /usr/include/limits.h \
-  /usr/include/features.h /usr/include/bits/alltypes.h \
-  /usr/include/bits/limits.h /usr/include/stdlib.h /usr/include/alloca.h \
-  /usr/include/string.h /usr/include/fortify/strings.h \
-  /usr/include/strings.h /usr/include/wchar.h \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/exception \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/bits/exception.h \
   /usr/lib/gcc/aarch64-alpine-linux-musl/14.2.0/../../../../include/c++/14.2.0/bits/version.h \
