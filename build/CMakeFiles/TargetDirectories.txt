@@ -1,3 +1,0 @@
-/public/Sandfall/build/CMakeFiles/game.dir
-/public/Sandfall/build/CMakeFiles/edit_cache.dir
-/public/Sandfall/build/CMakeFiles/rebuild_cache.dir
