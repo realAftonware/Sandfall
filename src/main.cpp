@@ -1,6 +1,8 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <iostream>
+#include "Grid.hpp"
+#include "GlobalVariable.hpp"
 
 int main() {
     std::cout << "[Sandfall] starting...\n";
@@ -10,8 +12,14 @@ int main() {
         return 1;
     }
 
-    SDL_Window* window = SDL_CreateWindow("Sandfall", 720, 1600, 0);
+    Grid grid;
+    float cellSizeInPixel = static_cast<float>(Global::hostScreenSizeX) / Global::canvaSizeX;
+    
+    SDL_Window* window = SDL_CreateWindow("Sandfall", Global::hostScreenSizeX, Global::hostScreenSizeY, 0);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
+
+    grid.cell[0][2].element = Global::Element::sand;
+    grid.cell[8][0].element = Global::Element::water;
     
     bool isRunning = true;
     while (isRunning) {
@@ -25,10 +33,16 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Box test
-        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-        SDL_FRect yellowBox = {50, 50, 400, 400};
-        SDL_RenderFillRect(renderer, &yellowBox);
+        // Drawing here
+        for (int y = 0; y < Global::canvaSizeY; y++) {
+            for (int x = 0; x < Global::canvaSizeX; x++) {
+                SDL_Color cellColor = grid.getColor(x, y);
+                SDL_SetRenderDrawColor(renderer, cellColor.r, cellColor.g, cellColor.b, cellColor.a);
+                SDL_FRect cell = {x * cellSizeInPixel, y * cellSizeInPixel, cellSizeInPixel, cellSizeInPixel};
+                SDL_RenderFillRect(renderer, &cell);
+            }
+        }
+        // Stop drawing here
         
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
