@@ -18,15 +18,17 @@ int main() {
     SDL_Window* window = SDL_CreateWindow("Sandfall", Global::hostScreenSizeX, Global::hostScreenSizeY, 0);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
 
-    grid.cell[0][2].element = Global::Element::sand;
-    grid.cell[8][0].element = Global::Element::water;
-    
     bool isRunning = true;
     while (isRunning) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
                 isRunning = false;
+            }
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    // Let continue from here
+                }
             }
         }
 
