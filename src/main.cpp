@@ -5,14 +5,15 @@
 #include "GlobalVariable.hpp"
 
 int main(int argc, char* argv[]) {
+    Grid grid;
+    float cellSizeInPixel = static_cast<float>(Global::hostScreenSizeX) / Global::canvaSizeX;
+    unsigned int holdingElementInt = static_cast<unsigned int>(Global::holdingElement);
+
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         std::cerr << "Failed to init SDL video services [" << SDL_GetError() << "]\n";
         SDL_Quit();
         return 1;
     }
-
-    Grid grid;
-    float cellSizeInPixel = static_cast<float>(Global::hostScreenSizeX) / Global::canvaSizeX;
 
     SDL_Window* window = SDL_CreateWindow("Sandfall", Global::hostScreenSizeX, Global::hostScreenSizeY, 0);
     if (window == NULL) {
@@ -42,7 +43,16 @@ int main(int argc, char* argv[]) {
                     if (xValid && yValid) {
                         unsigned int targetCellGridX = (event.button.x - Global::canvaPositionX) / cellSizeInPixel;
                         unsigned int targetCellGridY = (event.button.y - Global::canvaPositionY) / cellSizeInPixel;
-                        grid.setElement(targetCellGridX, targetCellGridY, Global::Element::sand);
+                        grid.setElement(targetCellGridX, targetCellGridY, Global::holdingElement);
+                    }
+                }
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    bool xValid = event.button.x >= Global::buttonPositionX && event.button.x < Global::buttonPositionX + Global::buttonSizeX;
+                    bool yValid = event.button.y >= Global::buttonPositionY && event.button.y < Global::buttonPositionY + Global::buttonSizeY;
+                    if (xValid && yValid) {
+                        if (holdingElementInt < 4) {
+                            
+                        }
                     }
                 }
             }
@@ -51,7 +61,8 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Drawing here
+        /* Drawing here */
+        // Canva
         for (int y = 0; y < Global::canvaSizeY; y++) {
             for (int x = 0; x < Global::canvaSizeX; x++) {
                 SDL_Color cellColor = grid.getColor(x, y);
@@ -60,7 +71,13 @@ int main(int argc, char* argv[]) {
                 SDL_RenderFillRect(renderer, &cell);
             }
         }
-        // Stop drawing here
+
+        // Element button
+        SDL_Color buttonColor = Global::getColor(static_cast<Global::Element>(holdingElementInt));
+        SDL_SetRenderDrawColor(renderer, buttonColor.r, buttonColor.g, buttonColor.b, buttonColor.a);
+        SDL_FRect button = {Global::buttonPositionX, Global::buttonPositionY, Global::buttonSizeX, Global::buttonSizeY};
+        SDL_RenderFillRect(renderer, &button);
+        /* Stop drawing here */
         
         SDL_RenderPresent(renderer);
         SDL_Delay(16);

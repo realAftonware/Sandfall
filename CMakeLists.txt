@@ -10,6 +10,7 @@ find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
 add_executable(game
     src/main.cpp
     src/Grid.cpp
+    src/GlobalVariable.cpp
 )
 
 target_include_directories(game
