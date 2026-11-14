@@ -6,6 +6,7 @@ SDL_Color Grid::getColor(const unsigned int x, const unsigned int y) {
     }
 
     switch (cell[y][x].element) {
+        default:
         case Global::Element::null:
             return SDL_Color{0,   0,   0,   255};
         case Global::Element::air:
@@ -17,4 +18,12 @@ SDL_Color Grid::getColor(const unsigned int x, const unsigned int y) {
         case Global::Element::stone:
             return SDL_Color{128, 140, 150, 255};
     }
+}
+
+void Grid::setElement(const unsigned int x, const unsigned int y, Global::Element targetElement) {
+    if (x > Global::canvaSizeX - 1 || y > Global::canvaSizeY - 1) {
+        return;
+    }
+
+    cell[y][x].element = targetElement;
 }

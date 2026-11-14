@@ -4,19 +4,29 @@
 #include "Grid.hpp"
 #include "GlobalVariable.hpp"
 
-int main() {
-    std::cout << "[Sandfall] starting...\n";
-
+int main(int argc, char* argv[]) {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         std::cerr << "Failed to init SDL video services [" << SDL_GetError() << "]\n";
+        SDL_Quit();
         return 1;
     }
 
     Grid grid;
     float cellSizeInPixel = static_cast<float>(Global::hostScreenSizeX) / Global::canvaSizeX;
-    
+
     SDL_Window* window = SDL_CreateWindow("Sandfall", Global::hostScreenSizeX, Global::hostScreenSizeY, 0);
+    if (window == NULL) {
+        std::cerr << "Failed to create SDL3 window [" << SDL_GetError() << "]\n";
+        SDL_Quit();
+        return 1;
+    }
+    
     SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
+    if (renderer == NULL) {
+        std::cerr << "Failed to create SDL3 renderer [" << SDL_GetError() << "]\n";
+        SDL_Quit();
+        return 1;
+    }
 
     bool isRunning = true;
     while (isRunning) {
@@ -27,7 +37,13 @@ int main() {
             }
             if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
                 if (event.button.button == SDL_BUTTON_LEFT) {
-                    // Let continue from here
+                    bool xValid = event.button.x >= Global::canvaPositionX && event.button.x < Global::canvaPositionX + (Global::canvaSizeX * cellSizeInPixel);
+                    bool yValid = event.button.y >= Global::canvaPositionY && event.button.y < Global::canvaPositionY + (Global::canvaSizeY * cellSizeInPixel);
+                    if (xValid && yValid) {
+                        unsigned int targetCellGridX = (event.button.x - Global::canvaPositionX) / cellSizeInPixel;
+                        unsigned int targetCellGridY = (event.button.y - Global::canvaPositionY) / cellSizeInPixel;
+                        grid.setElement(targetCellGridX, targetCellGridY, Global::Element::sand);
+                    }
                 }
             }
         }
@@ -40,7 +56,7 @@ int main() {
             for (int x = 0; x < Global::canvaSizeX; x++) {
                 SDL_Color cellColor = grid.getColor(x, y);
                 SDL_SetRenderDrawColor(renderer, cellColor.r, cellColor.g, cellColor.b, cellColor.a);
-                SDL_FRect cell = {x * cellSizeInPixel, y * cellSizeInPixel, cellSizeInPixel, cellSizeInPixel};
+                SDL_FRect cell = {x * cellSizeInPixel + Global::canvaPositionX, y * cellSizeInPixel + Global::canvaPositionY, cellSizeInPixel, cellSizeInPixel};
                 SDL_RenderFillRect(renderer, &cell);
             }
         }
