@@ -64,6 +64,12 @@ void Grid::update() {
                     }
                     break;
                 case Global::Element::water:
+                    if (cell.at(y).at(x).isGoingRight && x == Global::canvaSizeX - 1) {
+                        cell.at(y).at(x).isGoingRight = false;
+                    }
+                    if (!cell.at(y).at(x).isGoingRight && x == 0) {
+                        cell.at(y).at(x).isGoingRight = true;
+                    }
                     if (y < Global::canvaSizeY - 1) {
                         if (Global::getDensity(cell.at(y+1).at(x).element) < Global::getDensity(Global::Element::water)) {
                             swapElement(x, y, x, y+1);
@@ -101,10 +107,6 @@ void Grid::update() {
                         }
                         else if (cell.at(y).at(x).isGoingRight) {
                             cell.at(y).at(x).isGoingRight = false;
-                            break;
-                        }
-                        else {
-                            cell.at(y).at(x).isGoingRight = !cell.at(y).at(x).isGoingRight;
                             break;
                         }
                     }
