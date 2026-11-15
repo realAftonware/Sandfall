@@ -66,12 +66,17 @@ int main(int argc, char* argv[]) {
                 }
             }
             else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-                    isCanvaHeld = false;
+                isCanvaHeld = false;
             }
             if (event.type == SDL_EVENT_MOUSE_MOTION && isCanvaHeld) {
-                    unsigned int targetCellGridX = (event.motion.x - Global::canvaPositionX) / cellSizeInPixel;
-                    unsigned int targetCellGridY = (event.motion.y - Global::canvaPositionY) / cellSizeInPixel;
-                    grid.setElement(targetCellGridX, targetCellGridY, Global::holdingElement);
+                bool xValid = event.motion.x >= Global::canvaPositionX && event.motion.x < Global::canvaPositionX + (Global::canvaSizeX * cellSizeInPixel);
+                bool yValid = event.motion.y >= Global::canvaPositionY && event.motion.y < Global::canvaPositionY + (Global::canvaSizeY * cellSizeInPixel);
+                if (!xValid || !yValid) {
+                    continue;
+                }
+                unsigned int targetCellGridX = (event.motion.x - Global::canvaPositionX) / cellSizeInPixel;
+                unsigned int targetCellGridY = (event.motion.y - Global::canvaPositionY) / cellSizeInPixel;
+                grid.setElement(targetCellGridX, targetCellGridY, Global::holdingElement);
             }
         }
 

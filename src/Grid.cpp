@@ -1,5 +1,13 @@
 #include "../include/Grid.hpp"
 
+Grid::Grid() {
+    for (int y = 0; y < Global::canvaSizeY; y++) {
+        for (int x = 0; x < Global::canvaSizeX; x++) {
+            cell.at(y).at(x).element = Global::Element::air;
+        }
+    }
+}
+
 SDL_Color Grid::getColor(const unsigned int x, const unsigned int y) {
     if (x > Global::canvaSizeX - 1 || y > Global::canvaSizeY - 1) {
         return SDL_Color{0, 0, 0, 255};
@@ -17,14 +25,21 @@ void Grid::setElement(const unsigned int x, const unsigned int y, Global::Elemen
 }
 
 void Grid::swapElement(const unsigned int xA, const unsigned int yA, const unsigned int xB, const unsigned int yB) {
-    Global::Element tmp = cell.at(yA).at(xA).element;
+    Global::CellType tmp {cell.at(yA).at(xA).element, cell.at(yA).at(xA).isGoingRight, cell.at(yA).at(xA).alreadyMoved};
     cell.at(yA).at(xA).element = cell.at(yB).at(xB).element;
-    cell.at(yB).at(xB).element = tmp;
+    cell.at(yA).at(xA).isGoingRight = cell.at(yB).at(xB).isGoingRight;
+    cell.at(yB).at(xB).element = tmp.element;
+    cell.at(yB).at(xB).isGoingRight = tmp.isGoingRight;
+    cell.at(yB).at(xB).alreadyMoved = tmp.alreadyMoved;
 }
 
 void Grid::update() {
     for (int y = Global::canvaSizeY - 1; y > -1; y--) {
         for (int x = Global::canvaSizeX - 1; x > -1; x--) {
+            if (cell.at(y).at(x).alreadyMoved) {
+                cell.at(y).at(x).alreadyMoved = false;
+                continue;
+            }
             switch (cell.at(y).at(x).element) {
                 default:
                 case Global::Element::null:
@@ -33,45 +48,63 @@ void Grid::update() {
                     continue;
                 case Global::Element::sand:
                     if (y < Global::canvaSizeY - 1) {
-                        if (Global::getDensity(Global::Element::sand) > Global::getDensity(cell.at(y+1).at(x).element)) {
+                        if (Global::getDensity(cell.at(y+1).at(x).element) < Global::getDensity(Global::Element::sand)) {
                             swapElement(x, y, x, y+1);
+                            break;
                         }
-                    }
-                    if (x > 0 && y < Global::canvaSizeY - 1) {
-                        if (Global::getDensity(Global::Element::sand) > Global::getDensity(cell.at(y-1).at(x-1).element)) {
-                            swapElement(x, y, x-1, y+1);
+                        if (x > 0) {
+                            if (Global::getDensity(cell.at(y+1).at(x-1).element) < Global::getDensity(Global::Element::sand)) {
+                                swapElement(x, y, x-1, y+1);
+                                break;
+                            }
                         }
-                    }
-                    if (x < Global::canvaSizeX - 1 && y < Global::canvaSizeY - 1) {
-                        if (Global::getDensity(Global::Element::sand) > Global::getDensity(cell.at(y+1).at(x+1).element)) {
-                            swapElement(x, y, x+1, y+1);
+                        if (x < Global::canvaSizeX - 1) {
+                            if (Global::getDensity(cell.at(y+1).at(x+1).element) < Global::getDensity(Global::Element::sand)) {
+                                swapElement(x, y, x+1, y+1);
+                                break;
+                            }
                         }
                     }
                     break;
                 case Global::Element::water:
                     if (y < Global::canvaSizeY - 1) {
-                        if (Global::getDensity(Global::Element::water) > Global::getDensity(cell.at(y+1).at(x).element)) {
+                        if (Global::getDensity(cell.at(y+1).at(x).element) < Global::getDensity(Global::Element::water)) {
                             swapElement(x, y, x, y+1);
+                            break;
                         }
-                    }
-                    if (x > 0 && y < Global::canvaSizeY - 1) {
-                        if (Global::getDensity(Global::Element::water) > Global::getDensity(cell.at(y-1).at(x-1).element)) {
-                            swapElement(x, y, x-1, y+1);
+                        if (x > 0) {
+                            if (Global::getDensity(cell.at(y+1).at(x-1).element) < Global::getDensity(Global::Element::water)) {
+                                swapElement(x, y, x-1, y+1);
+                                break;
+                            }
                         }
-                    }
-                    if (x < Global::canvaSizeX - 1 && y < Global::canvaSizeY - 1) {
-                        if (Global::getDensity(Global::Element::water) > Global::getDensity(cell.at(y+1).at(x+1).element)) {
-                            swapElement(x, y, x+1, y+1);
+                        if (x < Global::canvaSizeX - 1) {
+                            if (Global::getDensity(cell.at(y+1).at(x+1).element) < Global::getDensity(Global::Element::water)) {
+                                swapElement(x, y, x+1, y+1);
+                                break;
+                            }
                         }
                     }
                     if (x > 0) {
-                        if (Global::getDensity(Global::Element::water) > Global::getDensity(cell.at(y).at(x-1).element)) {
+                        if (Global::getDensity(cell.at(y).at(x-1).element) < Global::getDensity(Global::Element::water) && !cell.at(y).at(x).isGoingRight) {
+                            cell.at(y).at(x).alreadyMoved = true;
                             swapElement(x, y, x-1, y);
+                            break;
+                        }
+                        else if (!cell.at(y).at(x).isGoingRight) {
+                            cell.at(y).at(x).isGoingRight = true;
+                            break;
                         }
                     }
                     if (x < Global::canvaSizeX - 1) {
-                        if (Global::getDensity(Global::Element::water) > Global::getDensity(cell.at(y).at(x+1).element)) {
+                        if (Global::getDensity(cell.at(y).at(x+1).element) < Global::getDensity(Global::Element::water) && cell.at(y).at(x).isGoingRight) {
+                            cell.at(y).at(x).alreadyMoved = false;
                             swapElement(x, y, x+1, y);
+                            break;
+                        }
+                        else if (cell.at(y).at(x).isGoingRight) {
+                            cell.at(y).at(x).isGoingRight = false;
+                            break;
                         }
                     }
                     break;

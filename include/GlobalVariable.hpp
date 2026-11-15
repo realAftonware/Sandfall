@@ -29,7 +29,8 @@ namespace Global {
     // Object
     struct CellType {
         Element element{Element::null};
-        float density{0.0};
+        bool isGoingRight = false;
+        bool alreadyMoved = false;
     };
 
     SDL_Color getColor(Element element);
