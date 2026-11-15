@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    bool isCanvaHeld = false;
     bool isRunning = true;
     while (isRunning) {
         SDL_Event event;
@@ -41,22 +42,40 @@ int main(int argc, char* argv[]) {
                     bool xValid = event.button.x >= Global::canvaPositionX && event.button.x < Global::canvaPositionX + (Global::canvaSizeX * cellSizeInPixel);
                     bool yValid = event.button.y >= Global::canvaPositionY && event.button.y < Global::canvaPositionY + (Global::canvaSizeY * cellSizeInPixel);
                     if (xValid && yValid) {
+                        isCanvaHeld = true;
                         unsigned int targetCellGridX = (event.button.x - Global::canvaPositionX) / cellSizeInPixel;
                         unsigned int targetCellGridY = (event.button.y - Global::canvaPositionY) / cellSizeInPixel;
                         grid.setElement(targetCellGridX, targetCellGridY, Global::holdingElement);
+                    }
+                    else {
+                        isCanvaHeld = false;
                     }
                 }
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     bool xValid = event.button.x >= Global::buttonPositionX && event.button.x < Global::buttonPositionX + Global::buttonSizeX;
                     bool yValid = event.button.y >= Global::buttonPositionY && event.button.y < Global::buttonPositionY + Global::buttonSizeY;
                     if (xValid && yValid) {
-                        if (holdingElementInt < 4) {
-                            
+                        if (holdingElementInt > Global::elementCounts - 2) {
+                            holdingElementInt = static_cast<unsigned int>(Global::Element::air);
                         }
+                        else {
+                            holdingElementInt++;
+                        }
+                        Global::holdingElement = static_cast<Global::Element>(holdingElementInt);
                     }
                 }
             }
+            else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+                    isCanvaHeld = false;
+            }
+            if (event.type == SDL_EVENT_MOUSE_MOTION && isCanvaHeld) {
+                    unsigned int targetCellGridX = (event.motion.x - Global::canvaPositionX) / cellSizeInPixel;
+                    unsigned int targetCellGridY = (event.motion.y - Global::canvaPositionY) / cellSizeInPixel;
+                    grid.setElement(targetCellGridX, targetCellGridY, Global::holdingElement);
+            }
         }
+
+        grid.update();
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);

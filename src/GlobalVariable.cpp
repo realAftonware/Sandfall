@@ -15,3 +15,18 @@ SDL_Color Global::getColor(Element element) {
             return SDL_Color{128, 140, 150, 255};
     }
 }
+
+float Global::getDensity(Element element) {
+    switch (element) {
+        default:
+        case Element::null:
+        case Element::air:
+            return 0.0;
+        case Element::sand:
+            return 2.5;
+        case Element::water:
+            return 0.75;
+        case Element::stone:
+            return 6.75;
+    }
+}

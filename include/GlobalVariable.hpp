@@ -21,16 +21,17 @@ namespace Global {
     constexpr unsigned int buttonSizeY = 300;
     constexpr unsigned int buttonPositionX = 210;
     constexpr unsigned int buttonPositionY = 1110;
+    constexpr unsigned int elementCounts = 5;
     
     // Variable
-    inline float ambientTemperature = 18.0;
     inline Element holdingElement = Element::sand;
 
     // Object
     struct CellType {
         Element element{Element::null};
-        float temperature = ambientTemperature;
+        float density{0.0};
     };
 
     SDL_Color getColor(Element element);
+    float getDensity(Element element);
 }
