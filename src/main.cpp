@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
     SDL_Window* window = SDL_CreateWindow("Sandfall", Global::hostScreenSizeX, Global::hostScreenSizeY, 0);
     if (window == NULL) {
         std::cerr << "Failed to create SDL3 window [" << SDL_GetError() << "]\n";
+        SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
     }
@@ -25,6 +26,8 @@ int main(int argc, char* argv[]) {
     SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
     if (renderer == NULL) {
         std::cerr << "Failed to create SDL3 renderer [" << SDL_GetError() << "]\n";
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
     }

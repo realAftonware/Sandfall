@@ -25,12 +25,9 @@ void Grid::setElement(const unsigned int x, const unsigned int y, Global::Elemen
 }
 
 void Grid::swapElement(const unsigned int xA, const unsigned int yA, const unsigned int xB, const unsigned int yB) {
-    Global::CellType tmp {cell.at(yA).at(xA).element, cell.at(yA).at(xA).isGoingRight, cell.at(yA).at(xA).alreadyMoved};
-    cell.at(yA).at(xA).element = cell.at(yB).at(xB).element;
-    cell.at(yA).at(xA).isGoingRight = cell.at(yB).at(xB).isGoingRight;
-    cell.at(yB).at(xB).element = tmp.element;
-    cell.at(yB).at(xB).isGoingRight = tmp.isGoingRight;
-    cell.at(yB).at(xB).alreadyMoved = tmp.alreadyMoved;
+    Global::CellType tmp = cell.at(yA).at(xA);
+    cell.at(yA).at(xA) = cell.at(yB).at(xB);
+    cell.at(yB).at(xB) = tmp;
 }
 
 void Grid::update() {
@@ -104,6 +101,10 @@ void Grid::update() {
                         }
                         else if (cell.at(y).at(x).isGoingRight) {
                             cell.at(y).at(x).isGoingRight = false;
+                            break;
+                        }
+                        else {
+                            cell.at(y).at(x).isGoingRight = !cell.at(y).at(x).isGoingRight;
                             break;
                         }
                     }
