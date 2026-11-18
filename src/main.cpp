@@ -30,14 +30,24 @@ int main(int argc, char* argv[]) {
     SDL_SetRenderLogicalPresentation(renderer, Sandfall::screenWidth, Sandfall::screenHeight, SDL_LOGICAL_PRESENTATION_LETTERBOX);
     
     Sandfall::Button canva = {
-        {0, 0, 0, 255},
+        {25, 25, 25, 255},
         Sandfall::canvaPixelWidth,
         Sandfall::canvaPixelHeight,
         Sandfall::canvaPositionX,
         Sandfall::canvaPositionY,
         false,
         0.0,
-        0.0
+        0.0,
+        [&]() {
+                if (canva.isHeld) {
+                unsigned int gridX = static_cast<unsigned int>(canva.relativeX / Sandfall::cellWidthInPixel);
+                unsigned int gridY = static_cast<unsigned int>(canva.relativeY / Sandfall::cellHeightInPixel);
+
+                if (gridX < Sandfall::canvaGridWidth && gridY < Sandfall::canvaGridHeight) {
+                    Grid::setCell(gridX, gridY, {Sandfall::Element::sand});
+                }
+            }
+        }
     };
     
     bool quit = false;
@@ -48,7 +58,21 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_EVENT_QUIT) {
                 quit = true;
             }
+            else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
+                canva.check(event.button.x, event.button.y);
+                canva.update();
+            }
+            else if (event.type == SDL_EVENT_MOUSE_MOTION && (event.motion.state & SDL_BUTTON_LMASK)) {
+                canva.check(event.motion.x, event.motion.y);
+                canva.update();
+            }
+            else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
+                canva.isHeld = false;
+                canva.relativeX = 0.0f;
+                canva.relativeY = 0.0f;
+            }
         }
+        
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
 
@@ -58,7 +82,11 @@ int main(int argc, char* argv[]) {
 
         for (int y = 0; y < Sandfall::canvaGridHeight; y++) {
             for (int x = 0; x < Sandfall::canvaGridWidth; x++) {
-                SDL_Color cellColor = Sandfall::getColor(Grid::getCell(x, y).element);
+                Sandfall::Element cellElement = Grid::getCell(x, y).element;
+
+                if (cellElement == Sandfall::Element::air) continue;
+                
+                SDL_Color cellColor = Sandfall::getColor(cellElement);
                 SDL_SetRenderDrawColor(renderer, cellColor.r, cellColor.g, cellColor.b, cellColor.a);
                 SDL_FRect cell = {x * Sandfall::cellWidthInPixel + Sandfall::canvaPositionX, y * Sandfall::cellHeightInPixel + Sandfall::canvaPositionY, Sandfall::cellWidthInPixel, Sandfall::cellHeightInPixel};
                 SDL_RenderFillRect(renderer, &cell);

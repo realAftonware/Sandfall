@@ -38,8 +38,8 @@ namespace Sandfall {
     }
 
     bool Button::isInBound(const float touchX, const float touchY) {
-        bool metX = touchX > positionX && touchX <= positionX + width;
-        bool metY = touchY > positionY && touchY <= positionY + height;
+        bool metX = touchX >= positionX && touchX < positionX + width;
+        bool metY = touchY >= positionY && touchY < positionY + height;
         return (metX && metY);
     }
     
