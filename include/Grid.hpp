@@ -1,15 +1,16 @@
 #pragma once
-#include "GlobalVariable.hpp"
+#include "../include/Variable.hpp"
 #include <SDL3/SDL.h>
 #include <array>
+#include <iostream>
 
-class Grid {
-    public:
-        std::array<std::array<Global::CellType, Global::canvaSizeX>, Global::canvaSizeY> cell = {};
-        Grid();
+namespace Grid {
+    struct CellData {
+        Sandfall::Element element = Sandfall::Element::air;
+    };
+    inline std::array<CellData, Sandfall::canvaGridWidth * Sandfall::canvaGridHeight> cell = {};
 
-        SDL_Color getColor(const unsigned int x, const unsigned int y);
-        void setElement(const unsigned int x, const unsigned int y, Global::Element targetElement);
-        void swapElement(const unsigned int xA, const unsigned int yA, const unsigned int xB, const unsigned int yB);
-        void update();
-};
+    unsigned int calcCellIndex(const unsigned int x, const unsigned int y);
+    CellData getCell(const unsigned int x, const unsigned int y);
+    void setCell(const unsigned int x, const unsigned int y, const CellData cellData);
+}
