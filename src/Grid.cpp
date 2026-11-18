@@ -2,8 +2,7 @@
 
 namespace Grid {
     unsigned int calcCellIndex(const unsigned int x, const unsigned int y) {
-        unsigned int tmp = x + (y * Sandfall::canvaGridHeight);
-        std::cout << "(calcCellIndex)" << tmp << " = " << x << "    " << y << "\n";
+        unsigned int tmp = x + (y * Sandfall::canvaGridWidth);
         return tmp;
     }
     CellData getCell(const unsigned int x, const unsigned int y) {

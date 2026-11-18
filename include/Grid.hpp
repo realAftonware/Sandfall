@@ -2,7 +2,6 @@
 #include "../include/Variable.hpp"
 #include <SDL3/SDL.h>
 #include <array>
-#include <iostream>
 
 namespace Grid {
     struct CellData {

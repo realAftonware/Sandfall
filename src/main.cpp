@@ -48,16 +48,6 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_EVENT_QUIT) {
                 quit = true;
             }
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-                canva.onHeld(event.button.x, event.button.y);
-            }
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-                canva.onRelease(event.button.x, event.button.y);
-            }
-            if (canva.isHeld && canva.isInBound(event.button.x, event.button.y)) {
-                std::cout << "(PollEvent)" << canva.relativeX << "    " << canva.relativeY << "\n";
-                Grid::setCell(canva.relativeX, canva.relativeY, {Sandfall::Element::sand});
-            }
         }
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);

@@ -43,9 +43,8 @@ namespace Sandfall {
         float relativeY = 0.0;
         
         void render(SDL_Renderer* renderer);
-        void onHeld(const float touchX, const float touchY);
-        void onRelease(const float touchX, const float touchY);
         bool isInBound(const float touchX, const float touchY);
+        void check(const float touchX, const float touchY);
         std::function<void()> update = []() {};
     };
 }

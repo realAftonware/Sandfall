@@ -37,29 +37,21 @@ namespace Sandfall {
         SDL_RenderFillRect(renderer, &box);
     }
 
-    void Button::onHeld(const float touchX, const float touchY) {
-        bool metX = touchX > positionX && touchX <= positionX + width;
-        bool metY = touchY > positionY && touchY <= positionY + height;
-        if (metX && metY) {
-            isHeld = true;
-            relativeX = touchX - positionX;
-            relativeY = touchY - positionY;
-        }
-    }
-
-    void Button::onRelease(const float touchX, const float touchY) {
-        bool metX = touchX > positionX && touchX <= positionX + width;
-        bool metY = touchY > positionY && touchY <= positionY + height;
-        if (!metX || !metY) {
-            isHeld = false;
-            relativeX = 0.0;
-            relativeY = 0.0;
-        }
-    }
-
     bool Button::isInBound(const float touchX, const float touchY) {
         bool metX = touchX > positionX && touchX <= positionX + width;
         bool metY = touchY > positionY && touchY <= positionY + height;
         return (metX && metY);
+    }
+    
+    void Button::check(const float touchX, const float touchY) {
+        if (isInBound(touchX, touchY)) {
+            isHeld = true;
+            relativeX = touchX - positionX;
+            relativeY = touchY - positionY;
+        }
+        else {
+            isHeld = false;
+            relativeX = relativeY = 0.0;
+        }
     }
 }
