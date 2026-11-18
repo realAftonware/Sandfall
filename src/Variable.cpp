@@ -1,18 +1,17 @@
 #include "../include/Variable.hpp"
 
 namespace Sandfall {
-    ElementType getType(Element element) {
+    float getDensity(Element element) {
         switch (element) {
             default:
-                return ElementType::stationary;
             case Element::air:
-                return ElementType::gas;
+                return 0.0;
             case Element::sand:
-                return ElementType::powder;
+                return 1.44;
             case Element::water:
-                return ElementType::liquid;
+                return 1.0;
             case Element::stone:
-                return ElementType::stationary;
+                return 2.6;
         }
     }
 

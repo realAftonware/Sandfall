@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
                 unsigned int gridY = static_cast<unsigned int>(canva.relativeY / Sandfall::cellHeightInPixel);
 
                 if (gridX < Sandfall::canvaGridWidth && gridY < Sandfall::canvaGridHeight) {
-                    Grid::setCell(gridX, gridY, {Sandfall::Element::sand});
+                    Grid::setCell(gridX, gridY, {Sandfall::currentHoldingElement});
                 }
             }
         }
@@ -52,19 +52,20 @@ int main(int argc, char* argv[]) {
     
     bool quit = false;
     while (!quit) {
+        SDL_PumpEvents();
         SDL_Event event;
-        while (SDL_PollEvent(&event)) {
+        while (SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_EVENT_FIRST, SDL_EVENT_LAST) > 0) {
             SDL_ConvertEventToRenderCoordinates(renderer, &event);
             if (event.type == SDL_EVENT_QUIT) {
                 quit = true;
             }
             else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
                 canva.check(event.button.x, event.button.y);
-                canva.update();
+                canva.lambda1();
             }
             else if (event.type == SDL_EVENT_MOUSE_MOTION && (event.motion.state & SDL_BUTTON_LMASK)) {
                 canva.check(event.motion.x, event.motion.y);
-                canva.update();
+                canva.lambda1();
             }
             else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
                 canva.isHeld = false;
@@ -72,6 +73,8 @@ int main(int argc, char* argv[]) {
                 canva.relativeY = 0.0f;
             }
         }
+
+        Grid::update();
         
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
