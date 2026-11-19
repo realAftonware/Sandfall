@@ -41,8 +41,8 @@ namespace Sandfall {
         void render(SDL_Renderer* renderer);
         bool isInBound(const float touchX, const float touchY);
         void check(const float touchX, const float touchY);
-        std::function<void(Button&, float x, float y)> lambda1 = []() {};
-        std::function<void()> lambda2 = []() {};
-        std::function<void()> lambda3 = []() {};
+        std::function<void(Button&)> lambda1 = [](Button&) {};
+        std::function<void(Button&)> lambda2 = [](Button&) {};
+        std::function<void(Button&)> lambda3 = [](Button&) {};
     };
 }

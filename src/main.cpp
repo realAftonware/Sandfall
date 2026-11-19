@@ -38,10 +38,10 @@ int main(int argc, char* argv[]) {
         false,
         0.0,
         0.0,
-        [&]() {
-            if (canva.isHeld) {
-                unsigned int gridX = static_cast<unsigned int>(canva.relativeX / Sandfall::cellWidthInPixel);
-                unsigned int gridY = static_cast<unsigned int>(canva.relativeY / Sandfall::cellHeightInPixel);
+        [](Sandfall::Button& self) {
+            if (self.isHeld) {
+                unsigned int gridX = static_cast<unsigned int>(self.relativeX / Sandfall::cellWidthInPixel);
+                unsigned int gridY = static_cast<unsigned int>(self.relativeY / Sandfall::cellHeightInPixel);
 
                 if (gridX < Sandfall::canvaGridWidth && gridY < Sandfall::canvaGridHeight) {
                     Grid::setCell(gridX, gridY, {Sandfall::currentHoldingElement});
@@ -59,10 +59,10 @@ int main(int argc, char* argv[]) {
         false,
         0.0,
         0.0,
-        [&](float x, float y) {
-            if (canva.isHeld) {
-                bool condX = x >= positionX && x <= positionX + width;
-                bool condY = y >= positionY && y <= positionY + height;
+        [](Sandfall::Button& self) {
+            if (self.isHeld) {
+                bool condX = self.relativeX >= 0 && self.relativeX <= self.positionX + self.width;
+                bool condY = self.relativeY >= 0 && self.relativeY <= self.positionY + self.height;
                 if (condX && condY) {
                     if (static_cast<int>(Sandfall::currentHoldingElement) < (static_cast<int>(Sandfall::Element::MAX) - 1)) {
                         Sandfall::currentHoldingElement = static_cast<Sandfall::Element>(static_cast<int>(Sandfall::currentHoldingElement) + 1);
@@ -86,13 +86,13 @@ int main(int argc, char* argv[]) {
             }
             else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
                 canva.check(event.button.x, event.button.y);
-                canva.lambda1();
+                canva.lambda1(canva);
                 switchElement.check(event.button.x, event.button.y);
-                switchElement.lambda1(event.button.x, event.button.y);
+                switchElement.lambda1(switchElement);
             }
             else if (event.type == SDL_EVENT_MOUSE_MOTION && (event.motion.state & SDL_BUTTON_LMASK)) {
                 canva.check(event.motion.x, event.motion.y);
-                canva.lambda1();
+                canva.lambda1(canva);
             }
             else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
                 canva.isHeld = false;
