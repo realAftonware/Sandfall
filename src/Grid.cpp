@@ -40,8 +40,9 @@ namespace Grid {
                 break;
             case Sandfall::Element::water:
                 if (y < Sandfall::canvaGridHeight - 1) {
-                    break;
+
                 }
+                break;
         }
     }
 
