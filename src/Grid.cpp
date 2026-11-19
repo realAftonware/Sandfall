@@ -21,36 +21,33 @@ namespace Grid {
     }
 
     void setViablePath(const unsigned int x, const unsigned int y) {
+        cell.at(calcCellIndex(x, y)).canGoDown = false;
+        cell.at(calcCellIndex(x, y)).canGoLeftDown = false;
+        cell.at(calcCellIndex(x, y)).canGoRightDown = false;
+        cell.at(calcCellIndex(x, y)).canGoLeft = false;
+        cell.at(calcCellIndex(x, y)).canGoRight = false;
         switch (getCell(x, y).element) {
             default:
             case Sandfall::Element::air:
             case Sandfall::Element::stone:
-                cell.at(calcCellIndex(x, y)).canGoDown = false;
-                cell.at(calcCellIndex(x, y)).canGoLeftDown = false;
-                cell.at(calcCellIndex(x, y)).canGoRightDown = false;
-                cell.at(calcCellIndex(x, y)).canGoLeft = false;
-                cell.at(calcCellIndex(x, y)).canGoRight = false;
                 break;
             case Sandfall::Element::sand:
-                if (y > 0) {
+                if (y < Sandfall::canvaGridHeight - 1) {
                     cell.at(calcCellIndex(x, y)).canGoDown = (Sandfall::getDensity(getCell(x, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
                     if (x > 0) cell.at(calcCellIndex(x, y)).canGoLeftDown = (Sandfall::getDensity(getCell(x-1, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
                     if (x < Sandfall::canvaGridWidth - 1)cell.at(calcCellIndex(x, y)).canGoRightDown = (Sandfall::getDensity(getCell(x+1, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
                 }
                 break;
             case Sandfall::Element::water:
-                if (y > 0) {
-                    cell.at(calcCellIndex(x, y)).canGoDown = (Sandfall::getDensity(getCell(x, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
-                    if (x > 0) cell.at(calcCellIndex(x, y)).canGoLeftDown = (Sandfall::getDensity(getCell(x-1, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
-                    if (x < Sandfall::canvaGridWidth - 1) cell.at(calcCellIndex(x, y)).canGoRightDown = (Sandfall::getDensity(getCell(x+1, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
+                if (y < Sandfall::canvaGridHeight - 1) {
+                    break;
                 }
-                break;
         }
     }
 
     void update() {
-        for (int y = Sandfall::canvaGridHeight - 1; y > 0; y--) {
-            for (int x = Sandfall::canvaGridWidth - 1; x > 0; x--) {
+        for (int y = Sandfall::canvaGridHeight - 1; y >= 0; y--) {
+            for (int x = Sandfall::canvaGridWidth - 1; x >= 0; x--) {
                 setViablePath(x, y);
                 CellData currentCell = getCell(x, y);
                 switch (currentCell.element) {

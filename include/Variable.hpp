@@ -7,7 +7,8 @@ namespace Sandfall {
         air,
         sand,
         water,
-        stone
+        stone,
+        MAX
     };
     
     SDL_Color getColor(Element element);
@@ -40,7 +41,7 @@ namespace Sandfall {
         void render(SDL_Renderer* renderer);
         bool isInBound(const float touchX, const float touchY);
         void check(const float touchX, const float touchY);
-        std::function<void()> lambda1 = []() {};
+        std::function<void(Button&, float x, float y)> lambda1 = []() {};
         std::function<void()> lambda2 = []() {};
         std::function<void()> lambda3 = []() {};
     };

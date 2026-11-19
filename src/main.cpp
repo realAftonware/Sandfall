@@ -39,12 +39,37 @@ int main(int argc, char* argv[]) {
         0.0,
         0.0,
         [&]() {
-                if (canva.isHeld) {
+            if (canva.isHeld) {
                 unsigned int gridX = static_cast<unsigned int>(canva.relativeX / Sandfall::cellWidthInPixel);
                 unsigned int gridY = static_cast<unsigned int>(canva.relativeY / Sandfall::cellHeightInPixel);
 
                 if (gridX < Sandfall::canvaGridWidth && gridY < Sandfall::canvaGridHeight) {
                     Grid::setCell(gridX, gridY, {Sandfall::currentHoldingElement});
+                }
+            }
+        }
+    };
+
+    Sandfall::Button switchElement = {
+        {252, 198, 3, 255},
+        300,
+        300,
+        210,
+        1110,
+        false,
+        0.0,
+        0.0,
+        [&](float x, float y) {
+            if (canva.isHeld) {
+                bool condX = x >= positionX && x <= positionX + width;
+                bool condY = y >= positionY && y <= positionY + height;
+                if (condX && condY) {
+                    if (static_cast<int>(Sandfall::currentHoldingElement) < (static_cast<int>(Sandfall::Element::MAX) - 1)) {
+                        Sandfall::currentHoldingElement = static_cast<Sandfall::Element>(static_cast<int>(Sandfall::currentHoldingElement) + 1);
+                    }
+                    else {
+                        Sandfall::currentHoldingElement = Sandfall::Element::air;
+                    }
                 }
             }
         }
@@ -62,6 +87,8 @@ int main(int argc, char* argv[]) {
             else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
                 canva.check(event.button.x, event.button.y);
                 canva.lambda1();
+                switchElement.check(event.button.x, event.button.y);
+                switchElement.lambda1(event.button.x, event.button.y);
             }
             else if (event.type == SDL_EVENT_MOUSE_MOTION && (event.motion.state & SDL_BUTTON_LMASK)) {
                 canva.check(event.motion.x, event.motion.y);
@@ -75,6 +102,7 @@ int main(int argc, char* argv[]) {
         }
 
         Grid::update();
+        switchElement.fillColor = Sandfall::getColor(Sandfall::currentHoldingElement);
         
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
@@ -82,6 +110,7 @@ int main(int argc, char* argv[]) {
         // Start drawing here
 
         canva.render(renderer);
+        switchElement.render(renderer);
 
         for (int y = 0; y < Sandfall::canvaGridHeight; y++) {
             for (int x = 0; x < Sandfall::canvaGridWidth; x++) {

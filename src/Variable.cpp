@@ -24,7 +24,7 @@ namespace Sandfall {
             case Element::sand:
                 return {252, 198, 3, 255};
             case Element::water:
-                return {3,   136, 252, 255};
+                return {3, 136, 252, 255};
             case Element::stone:
                 return {128, 140, 150, 255};
         }
