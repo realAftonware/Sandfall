@@ -61,16 +61,11 @@ int main(int argc, char* argv[]) {
         0.0,
         [](Sandfall::Button& self) {
             if (self.isHeld) {
-                bool condX = self.relativeX >= 0 && self.relativeX <= self.positionX + self.width;
-                bool condY = self.relativeY >= 0 && self.relativeY <= self.positionY + self.height;
-                if (condX && condY) {
-                    if (static_cast<int>(Sandfall::currentHoldingElement) < (static_cast<int>(Sandfall::Element::MAX) - 1)) {
-                        Sandfall::currentHoldingElement = static_cast<Sandfall::Element>(static_cast<int>(Sandfall::currentHoldingElement) + 1);
-                    }
-                    else {
-                        Sandfall::currentHoldingElement = Sandfall::Element::air;
-                    }
+                int next = static_cast<int>(Sandfall::currentHoldingElement) + 1;
+                if (next >= static_cast<int>(Sandfall::Element::MAX)) {
+                    next = 0;
                 }
+                Sandfall::currentHoldingElement = static_cast<Sandfall::Element>(next);
             }
         }
     };

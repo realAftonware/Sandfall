@@ -6,7 +6,7 @@ namespace Grid {
         return tmp;
     }
     
-    CellData getCell(const unsigned int x, const unsigned int y) {
+    CellData& getCell(const unsigned int x, const unsigned int y) {
         return cell.at(calcCellIndex(x, y));
     }
     
@@ -20,48 +20,71 @@ namespace Grid {
         setCell(bx, by, swapPlace);
     }
 
-    void setViablePath(const unsigned int x, const unsigned int y) {
-        cell.at(calcCellIndex(x, y)).canGoDown = false;
-        cell.at(calcCellIndex(x, y)).canGoLeftDown = false;
-        cell.at(calcCellIndex(x, y)).canGoRightDown = false;
-        cell.at(calcCellIndex(x, y)).canGoLeft = false;
-        cell.at(calcCellIndex(x, y)).canGoRight = false;
-        switch (getCell(x, y).element) {
-            default:
-            case Sandfall::Element::air:
-            case Sandfall::Element::stone:
-                break;
-            case Sandfall::Element::sand:
-                if (y < Sandfall::canvaGridHeight - 1) {
-                    cell.at(calcCellIndex(x, y)).canGoDown = (Sandfall::getDensity(getCell(x, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
-                    if (x > 0) cell.at(calcCellIndex(x, y)).canGoLeftDown = (Sandfall::getDensity(getCell(x-1, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
-                    if (x < Sandfall::canvaGridWidth - 1)cell.at(calcCellIndex(x, y)).canGoRightDown = (Sandfall::getDensity(getCell(x+1, y+1).element) < Sandfall::getDensity(Sandfall::Element::sand));
-                }
-                break;
-            case Sandfall::Element::water:
-                if (y < Sandfall::canvaGridHeight - 1) {
-
-                }
-                break;
-        }
-    }
-
     void update() {
-        for (int y = Sandfall::canvaGridHeight - 1; y >= 0; y--) {
-            for (int x = Sandfall::canvaGridWidth - 1; x >= 0; x--) {
-                setViablePath(x, y);
-                CellData currentCell = getCell(x, y);
+        for (int y = Sandfall::canvaGridHeight - 1; y >= 0; --y) {
+            for (int x = Sandfall::canvaGridWidth - 1; x >= 0; --x) {
+                CellData& currentCell = getCell(x, y);
+
+                if (!currentCell.canMove) {
+                    currentCell.canMove = true;
+                    continue;
+                }
+                
                 switch (currentCell.element) {
-                    default:
+                    case Sandfall::Element::MAX:
                     case Sandfall::Element::air:
                     case Sandfall::Element::stone:
                         continue;
                     case Sandfall::Element::sand:
-                        if (currentCell.canGoDown) swapCell(x, y, x, y+1);
-                        else if (currentCell.canGoLeftDown) swapCell(x, y, x-1, y+1);
-                        else if (currentCell.canGoRightDown) swapCell(x, y, x+1, y+1);
+                        if (y < Sandfall::canvaGridHeight - 1) {
+                            if (Sandfall::getDensity(currentCell.element) > Sandfall::getDensity(getCell(x, y+1).element)) {
+                                currentCell.canMove = false;
+                                swapCell(x, y, x, y+1);
+                            }
+                            else if (x > 0 && Sandfall::getDensity(currentCell.element) > Sandfall::getDensity(getCell(x-1, y+1).element)) {
+                                currentCell.canMove = false;
+                                swapCell(x, y, x-1, y+1);
+                            }
+                            else if (x < Sandfall::canvaGridWidth - 1 && Sandfall::getDensity(currentCell.element) > Sandfall::getDensity(getCell(x+1, y+1).element)) {
+                                currentCell.canMove = false;
+                                swapCell(x, y, x+1, y+1);
+                            }
+                        }
                         break;
                     case Sandfall::Element::water:
+                        if (y < Sandfall::canvaGridHeight - 1) {
+                            if (Sandfall::getDensity(currentCell.element) > Sandfall::getDensity(getCell(x, y+1).element)) {
+                                currentCell.canMove = false;
+                                swapCell(x, y, x, y+1);
+                                break;
+                            }
+                            else if (x > 0 && Sandfall::getDensity(currentCell.element) > Sandfall::getDensity(getCell(x-1, y+1).element)) {
+                                currentCell.canMove = false;
+                                swapCell(x, y, x-1, y+1);
+                                break;
+                            }
+                            else if (x < Sandfall::canvaGridWidth - 1 && Sandfall::getDensity(currentCell.element) > Sandfall::getDensity(getCell(x+1, y+1).element)) {
+                                currentCell.canMove = false;
+                                swapCell(x, y, x+1, y+1);
+                                break;
+                            }
+                        }
+                        if (x > 0 && Sandfall::getDensity(currentCell.element) > Sandfall::getDensity(getCell(x-1, y).element) && !currentCell.waterGoRight) {
+                            currentCell.canMove = false;
+                            swapCell(x, y, x-1, y);
+                        }
+                        else {
+                            currentCell.waterGoRight = true;
+                        }
+                        break;
+                        
+                        if (x < Sandfall::canvaGridWidth - 1 && Sandfall::getDensity(currentCell.element) > Sandfall::getDensity(getCell(x+1, y).element) && currentCell.waterGoRight) {
+                            currentCell.canMove = false;
+                            swapCell(x, y, x+1, y);
+                        }
+                        else {
+                            currentCell.waterGoRight = false;
+                        }
                         break;
                 }
             }
